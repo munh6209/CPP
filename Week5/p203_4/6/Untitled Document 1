@@ -1,0 +1,39 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+int main() {
+    string filename = "ranking.txt";
+    vector<pair<int,string>> ranks; // (score, name)
+
+    ifstream ifs(filename);
+    if (ifs) {
+        string name; int score;
+        while (ifs >> name >> score) {
+            ranks.push_back({score, name});
+        }
+        ifs.close();
+    }
+
+    string newName; int newScore;
+    cout << "이름 입력: "; cin >> newName;
+    cout << "점수 입력: "; cin >> newScore;
+    ranks.push_back({newScore, newName});
+
+    sort(ranks.begin(), ranks.end(), [](auto &a, auto &b){ return a.first > b.first; });
+
+    if (ranks.size() > 10) ranks.resize(10);
+
+    ofstream ofs(filename);
+    for (auto &p : ranks) {
+        ofs << p.second << ' ' << p.first << '\n';
+    }
+    ofs.close();
+
+    cout << "현재 랭킹 (상위 " << ranks.size() << "):\n";
+    for (auto &p : ranks) cout << p.second << ' ' << p.first << '\n';
+    return 0;
+}
