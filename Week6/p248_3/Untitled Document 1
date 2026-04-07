@@ -1,0 +1,25 @@
+MyTime addTime(MyTime t1, MyTime t2) {
+    MyTime r;
+    r.hour   = t1.hour + t2.hour;
+    r.minute = t1.minute + t2.minute;
+    r.second = t1.second + t2.second;
+    normalize(r);
+    return r;
+}
+
+
+void addTime(MyTime t1, MyTime t2, MyTime& t3) {
+    t3.hour   = t1.hour + t2.hour;
+    t3.minute = t1.minute + t2.minute;
+    t3.second = t1.second + t2.second;
+    normalize(t3);
+}
+
+
+void addTime(MyTime t1, MyTime t2, MyTime* pt) {
+    if (!pt) return;
+    pt->hour   = t1.hour + t2.hour;
+    pt->minute = t1.minute + t2.minute;
+    pt->second = t1.second + t2.second;
+    normalize(*pt);
+}
