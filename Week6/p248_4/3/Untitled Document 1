@@ -1,0 +1,38 @@
+#include <stdio.h>
+
+#define MAX_ROWS 40
+#define MAX_COLS 80
+
+static int MineMapLabel[MAX_ROWS][MAX_COLS];
+
+int main(void) {
+    int rows, cols;
+    printf("가로 크기 입력 (1~80): ");
+    scanf("%d", &cols);
+    printf("세로 크기 입력 (1~40): ");
+    scanf("%d", &rows);
+
+    printf("    ");
+    for (int c = 0; c < cols; ++c) {
+        int tens = (c / 10) % 10;
+        printf("%d", tens);
+    }
+    printf("\n    ");
+    for (int c = 0; c < cols; ++c) {
+        int ones = c % 10;
+        printf("%d", ones);
+    }
+    printf("\n    ");
+    for (int c = 0; c < cols; ++c) printf("-");
+    printf("\n");
+
+    for (int r = 0; r < rows; ++r) {
+        printf("%3d |", r);
+        for (int c = 0; c < cols; ++c) {
+            if (MineMapLabel[r][c] == -1) putchar('*');
+            else putchar('.');
+        }
+        printf("\n");
+    }
+    return 0;
+}

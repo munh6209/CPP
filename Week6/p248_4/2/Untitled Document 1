@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define MAX_ROWS 40
+#define MAX_COLS 80
+
+static int MineMapLabel[MAX_ROWS][MAX_COLS];
+
+int main(void) {
+    int rows, cols, mines;
+    printf("가로 크기 입력 (1~80): ");
+    scanf("%d", &cols);
+    printf("세로 크기 입력 (1~40): ");
+    scanf("%d", &rows);
+    printf("지뢰 개수 입력: ");
+    scanf("%d", &mines);
+
+    srand((unsigned)time(NULL));
+    int placed = 0;
+    while (placed < mines) {
+        int r = rand() % rows;
+        int c = rand() % cols;
+        if (MineMapLabel[r][c] == -1) continue;
+        MineMapLabel[r][c] = -1;
+        placed++;
+    }
+
+    printf("%d개의 지뢰가 배치되었습니다.\n", mines);
+    return 0;
+}
