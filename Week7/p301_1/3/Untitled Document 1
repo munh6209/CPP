@@ -1,0 +1,9 @@
+#include "MyTime.h"
+#include <iostream>
+#include <iomanip>
+
+void MyTime::print() {
+    std::cout << std::setfill('0') << std::setw(2) << hour << ":"
+              << std::setw(2) << minute << ":" << std::setw(2) << second << ":"
+              << std::setw(3) << millisecond;
+}

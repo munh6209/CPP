@@ -1,0 +1,20 @@
+#ifndef MYTIME_UML_H
+#define MYTIME_UML_H
+
+#include <iostream>
+
+class MyTime {
+private:
+    int hour;
+    int minute;
+    int second;
+    int millisecond;
+
+public:
+    MyTime();
+    MyTime(int h, int m, int s, int ms);
+    void convert(double duration);
+    void print();
+    MyTime add(MyTime t);
+    void reset();
+};

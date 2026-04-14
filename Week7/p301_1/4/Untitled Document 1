@@ -1,0 +1,17 @@
+#include "MyTime.h"
+#include <iostream>
+
+void MyTime::read() {
+    std::cout << "Enter hour minute second millisecond: ";
+    int h, m, s, ms;
+    if (std::cin >> h >> m >> s >> ms) {
+        hour = h;
+        minute = m;
+        second = s;
+        millisecond = ms;
+    } else {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        hour = minute = second = millisecond = 0;
+    }
+}

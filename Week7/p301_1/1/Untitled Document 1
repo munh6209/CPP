@@ -1,0 +1,57 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+class MyTime {
+private:
+    int hour;
+    int minute;
+    int second;
+    int millisecond;
+
+public:
+    MyTime() : hour(0), minute(0), second(0), millisecond(0) {}
+    MyTime(int h, int m, int s, int ms) : hour(h), minute(m), second(s), millisecond(ms) {}
+
+    void convert(double duration) {
+        long long total_ms = static_cast<long long>(std::llround(duration * 1000.0));
+        millisecond = static_cast<int>(total_ms % 1000);
+        total_ms /= 1000;
+        second = static_cast<int>(total_ms % 60);
+        total_ms /= 60;
+        minute = static_cast<int>(total_ms % 60);
+        total_ms /= 60;
+        hour = static_cast<int>(total_ms);
+    }
+
+    void print() {
+        std::cout << std::setfill('0') << std::setw(2) << hour << ":"
+                  << std::setw(2) << minute << ":" << std::setw(2) << second << ":"
+                  << std::setw(3) << millisecond;
+    }
+
+    MyTime add(MyTime t) {
+        long long a = static_cast<long long>(hour) * 3600000LL
+                    + static_cast<long long>(minute) * 60000LL
+                    + static_cast<long long>(second) * 1000LL
+                    + millisecond;
+        long long b = static_cast<long long>(t.hour) * 3600000LL
+                    + static_cast<long long>(t.minute) * 60000LL
+                    + static_cast<long long>(t.second) * 1000LL
+                    + t.millisecond;
+        long long sum = a + b;
+        MyTime r;
+        r.millisecond = static_cast<int>(sum % 1000);
+        sum /= 1000;
+        r.second = static_cast<int>(sum % 60);
+        sum /= 60;
+        r.minute = static_cast<int>(sum % 60);
+        sum /= 60;
+        r.hour = static_cast<int>(sum);
+        return r;
+    }
+
+    void reset() {
+        hour = minute = second = millisecond = 0;
+    }
+};
