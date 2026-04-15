@@ -1,0 +1,33 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main() {
+    MyDic dic;
+
+    dic.add("apple", "사과");
+    dic.add("book", "책");
+    dic.add("computer", "컴퓨터");
+
+    cout << "직접 추가한 단어들:\n";
+    dic.print();
+
+    string filename = "mydic.txt";
+    dic.store(filename);
+    cout << "단어장을 파일에 저장했습니다: " << filename << '\n';
+
+    dic.clear();
+    cout << "단어장 초기화 후 로드 전 상태:\n";
+    dic.print();
+
+    dic.load(filename);
+    cout << "파일에서 읽어온 단어들:\n";
+    dic.print();
+
+    if (dic.size() > 0) {
+        cout << "0번째 영어: " << dic.getEng(0) << '\n';
+        cout << "0번째 한글: " << dic.getKor(0) << '\n';
+    }
+
+    return 0;
+}

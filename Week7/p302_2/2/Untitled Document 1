@@ -1,0 +1,84 @@
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+using namespace std;
+
+const int MAXWORDS = 1000;
+
+struct WordPair {
+    string eng;
+    string kor;
+};
+
+class MyDic {
+    WordPair words[MAXWORDS];
+    int nWords;
+public:
+    MyDic() : nWords(0) {}
+
+    inline void add(string eng, string kor) {
+        if (nWords >= MAXWORDS) {
+            cerr << "단어장이 가득 찼습니다.\n";
+            return;
+        }
+        words[nWords].eng = eng;
+        words[nWords].kor = kor;
+        ++nWords;
+    }
+
+    inline void load(string filename) {
+        ifstream fin(filename);
+        if (!fin) {
+            cerr << "파일을 열 수 없습니다: " << filename << '\n';
+            return;
+        }
+        nWords = 0;
+        string line;
+        while (getline(fin, line)) {
+            if (line.empty()) continue;
+            istringstream iss(line);
+            string eng;
+            if (!(iss >> eng)) continue;
+            string kor;
+            getline(iss, kor);
+            if (!kor.empty() && kor[0] == ' ') kor.erase(0, 1);
+            add(eng, kor);
+        }
+        fin.close();
+    }
+
+    inline void store(string filename) {
+        ofstream fout(filename);
+        if (!fout) {
+            cerr << "파일을 열 수 없습니다: " << filename << '\n';
+            return;
+        }
+        for (int i = 0; i < nWords; ++i) {
+            fout << words[i].eng << ' ' << words[i].kor << '\n';
+        }
+        fout.close();
+    }
+
+    inline void print() {
+        cout << "==== MyDic (" << nWords << "개) ====\n";
+        for (int i = 0; i < nWords; ++i) {
+            cout << i << ": " << words[i].eng << " - " << words[i].kor << '\n';
+        }
+        cout << "=========================\n";
+    }
+
+    inline string getEng(int id) {
+        if (id < 0 || id >= nWords) return string();
+        return words[id].eng;
+    }
+
+    inline string getKor(int id) {
+        if (id < 0 || id >= nWords) return string();
+        return words[id].kor;
+    }
+
+    inline int size() const { return nWords; }
+
+    inline void clear() { nWords = 0; }
+};
