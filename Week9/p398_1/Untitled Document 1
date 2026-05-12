@@ -1,0 +1,60 @@
+#include <iostream>
+#include <cstring>
+
+class Sample {
+    char *name;
+    static int count;
+public:
+    Sample() : name(nullptr) {
+        ++count;
+    }
+
+    Sample(const char *nameStr) {
+        if (nameStr) {
+            size_t len = std::strlen(nameStr);
+            name = new char[len + 1];
+            std::strcpy(name, nameStr);
+        } else {
+            name = nullptr;
+        }
+        ++count;
+    }
+
+    Sample(const Sample &other) {
+        if (other.name) {
+            size_t len = std::strlen(other.name);
+            name = new char[len + 1];
+            std::strcpy(name, other.name);
+        } else {
+            name = nullptr;
+        }
+        ++count;
+    }
+
+    ~Sample() {
+        delete[] name;
+        --count;
+    }
+
+    static void printCount() {
+        std::cout << "Sample 객체 수: " << count << std::endl;
+    }
+
+    void printName() const {
+        if (name) std::cout << name << std::endl;
+        else std::cout << "(no name)" << std::endl;
+    }
+};
+
+int Sample::count = 0;
+
+int main() {
+    Sample::printCount();
+    Sample a("sample");
+    Sample::printCount();
+    Sample b(a);
+    Sample::printCount();
+    a.printName();
+    b.printName();
+    return 0;
+}
