@@ -1,0 +1,112 @@
+#include <iostream>
+#include <cstring>
+#include <cstdlib>
+#include <ctime>
+
+class Monster {
+    char *name;
+    int nEnergy;
+public:
+    Monster(const char *nm = "Monster", int energy = 5) {
+        if (nm) {
+            size_t len = std::strlen(nm);
+            name = new char[len + 1];
+            std::strcpy(name, nm);
+        } else {
+            name = nullptr;
+        }
+        nEnergy = energy;
+    }
+    ~Monster() {
+        delete[] name;
+    }
+    void eat(int food) {
+        nEnergy += food;
+    }
+    void liveOneTurn() {
+        if (nEnergy > 0) --nEnergy;
+    }
+    int getEnergy() const {
+        return nEnergy;
+    }
+    void print() const {
+        if (name) std::cout << name;
+        else std::cout << "Unnamed";
+        std::cout << " (E=" << nEnergy << ")";
+    }
+};
+
+class MonsterWorld {
+    Monster **pMon;
+    int nMon;
+    int capacity;
+public:
+    MonsterWorld(int cap = 100) {
+        capacity = cap;
+        pMon = new Monster*[capacity];
+        nMon = 0;
+    }
+    ~MonsterWorld() {
+        for (int i = 0; i < nMon; ++i) delete pMon[i];
+        delete[] pMon;
+    }
+    bool addMonster(const char *name, int energy) {
+        if (nMon >= capacity) return false;
+        pMon[nMon++] = new Monster(name, energy);
+        return true;
+    }
+    void simulateTurn() {
+        for (int i = 0; i < nMon; ++i) pMon[i]->liveOneTurn();
+        checkStarvation();
+    }
+    void checkStarvation() {
+        for (int i = 0; i < nMon; ) {
+            if (pMon[i]->getEnergy() <= 0) {
+                std::cout << "몬스터 하나가 굶어죽습니다. ";
+                pMon[i]->print();
+                std::cout << std::endl;
+                delete pMon[i];
+                pMon[i] = pMon[nMon - 1];
+                --nMon;
+            } else {
+                ++i;
+            }
+        }
+    }
+    void printAll() const {
+        std::cout << "현재 몬스터 수: " << nMon << std::endl;
+        for (int i = 0; i < nMon; ++i) {
+            std::cout << i << ": ";
+            pMon[i]->print();
+            std::cout << std::endl;
+        }
+    }
+    int getCount() const { return nMon; }
+};
+
+int main() {
+    std::srand((unsigned)std::time(nullptr));
+    MonsterWorld world(50);
+    world.addMonster("Goblin", 3);
+    world.addMonster("Orc", 5);
+    world.addMonster("Slime", 2);
+    world.addMonster("Ghost", 4);
+
+    int turn = 0;
+    while (world.getCount() > 0 && turn < 10) {
+        std::cout << "=== Turn " << turn << " ===" << std::endl;
+        world.printAll();
+        for (int i = 0; i < 1 + std::rand() % 3; ++i) {
+            int idx = std::rand() % 4;
+            int food = (std::rand() % 3) - 1;
+            (void)idx;
+            (void)food;
+        }
+        world.simulateTurn();
+        ++turn;
+        std::cout << std::endl;
+    }
+
+    std::cout << "시뮬레이션 종료. 남은 몬스터: " << world.getCount() << std::endl;
+    return 0;
+}
